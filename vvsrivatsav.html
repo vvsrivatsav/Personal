@@ -64,6 +64,7 @@
   --shell:1180px;
   --gut:clamp(20px,5vw,64px);
   --sec:clamp(76px,11vw,150px);
+  --edge:max(var(--gut),calc((100vw - var(--shell)) / 2 + var(--gut)));
 }
 
 /* ============ base ============ */
@@ -206,33 +207,57 @@ h1.head .soft{color:rgba(234,235,231,.42)}
 .job-body li b{color:var(--ink);font-weight:600}
 @media (max-width:760px){.job{grid-template-columns:1fr;gap:16px}}
 
-/* ============ projects ============ */
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2vw,24px)}
-.proj{position:relative;background:var(--card);border:1px solid var(--line-soft);border-radius:20px;
-  padding:clamp(24px,3vw,36px);display:flex;flex-direction:column;overflow:hidden;
+/* ============ projects rail ============ */
+.rail-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:clamp(28px,4vw,44px)}
+.rail-head .sec-head{margin-bottom:0}
+.rail-btns{display:flex;gap:10px;flex:none;padding-bottom:4px}
+.rb{width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);
+  display:grid;place-items:center;cursor:pointer;padding:0;
+  transition:transform .3s var(--ease),background .3s ease,color .3s ease,border-color .3s ease,opacity .3s ease}
+.rb svg{width:17px;height:17px}
+.rb:hover:not(:disabled){background:var(--ink);color:var(--paper);border-color:var(--ink);transform:translateY(-2px)}
+.rb:disabled{opacity:.3;cursor:default}
+@media (max-width:760px){.rail-btns{display:none}}
+
+.rail{position:relative}
+.rail::before,.rail::after{content:"";position:absolute;top:0;bottom:0;width:clamp(24px,6vw,80px);z-index:2;pointer-events:none}
+.rail::before{left:0;background:linear-gradient(90deg,var(--paper),transparent)}
+.rail::after{right:0;background:linear-gradient(270deg,var(--paper),transparent)}
+.track{display:flex;gap:clamp(14px,1.7vw,22px);overflow-x:auto;overscroll-behavior-x:contain;
+  scroll-snap-type:x mandatory;scroll-padding-left:var(--edge);
+  padding:14px var(--edge) 32px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.track::-webkit-scrollbar{display:none}
+.track:focus-visible{outline:2px solid var(--accent);outline-offset:-4px;border-radius:24px}
+
+.proj{position:relative;flex:0 0 clamp(276px,32vw,410px);scroll-snap-align:start;
+  background:var(--card);border:1px solid var(--line-soft);border-radius:20px;
+  padding:clamp(24px,2.6vw,32px);display:flex;flex-direction:column;overflow:hidden;
   transition:transform .45s var(--ease),box-shadow .45s ease,border-color .45s ease}
 .proj::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s ease;
-  background:radial-gradient(360px circle at var(--mx,50%) var(--my,0%),rgba(34,66,199,.08),transparent 62%)}
+  background:radial-gradient(340px circle at var(--mx,50%) var(--my,0%),rgba(34,66,199,.08),transparent 62%)}
 .proj:hover{transform:translateY(-5px);box-shadow:0 26px 60px -34px rgba(20,24,28,.5);border-color:var(--line)}
 .proj:hover::before{opacity:1}
 .proj > *{position:relative}
-.proj.wide{grid-column:span 2}
-.proj-top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;margin-bottom:16px}
-.proj h3{font-size:clamp(20px,2.3vw,25px);letter-spacing:-.03em;max-width:22ch}
-.proj .when{font-size:13.5px;color:var(--ink-3);white-space:nowrap}
-.proj .kind{font-size:14.5px;color:var(--accent);margin-bottom:14px;font-weight:500}
-.proj p{font-size:16px;line-height:1.6;color:var(--ink-2);max-width:62ch}
-.proj p + p{margin-top:14px}
+.proj-top{display:flex;justify-content:space-between;align-items:baseline;gap:14px;margin-bottom:14px}
+.proj h3{font-size:clamp(19px,2.1vw,23px);letter-spacing:-.03em;max-width:20ch}
+.proj .when{font-size:13px;color:var(--ink-3);white-space:nowrap}
+.proj .kind{font-size:14px;color:var(--accent);margin-bottom:14px;font-weight:500}
+.proj p{font-size:15.5px;line-height:1.58;color:var(--ink-2)}
+.proj p + p{margin-top:13px}
+.stat{margin-top:18px;padding:16px 18px;border-radius:14px;background:rgba(34,66,199,.05);border:1px solid rgba(34,66,199,.14)}
+.stat b{display:block;font-size:clamp(24px,2.8vw,32px);font-weight:600;letter-spacing:-.04em;line-height:1;color:var(--ink)}
+.stat span{display:block;margin-top:9px;font-size:14px;line-height:1.45;color:var(--ink-2)}
+.proj-link{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;margin-top:18px;
+  font-size:14.5px;font-weight:500;color:var(--accent);text-decoration:none;
+  border-bottom:1px solid rgba(34,66,199,.28);padding-bottom:2px;transition:border-color .3s ease,gap .3s var(--ease)}
+.proj-link:hover{border-color:var(--accent);gap:11px}
+.proj-link svg{width:13px;height:13px;flex:none}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:22px}
-.chip{font-size:13px;color:var(--ink-2);border:1px solid var(--line);border-radius:100px;padding:5px 12px;background:rgba(255,255,255,.5)}
-.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,3vw,40px)}
-.split .metric{font-size:clamp(30px,4vw,44px);font-weight:600;letter-spacing:-.04em;line-height:1.05}
-.split .metric + p{margin-top:12px}
-@media (max-width:860px){
-  .grid{grid-template-columns:1fr}
-  .proj.wide{grid-column:span 1}
-  .split{grid-template-columns:1fr}
-}
+.chip{font-size:12.5px;color:var(--ink-2);border:1px solid var(--line);border-radius:100px;padding:5px 11px;background:rgba(255,255,255,.5)}
+
+.rail-prog{height:2px;background:var(--line);border-radius:2px;overflow:hidden}
+.rail-prog i{display:block;height:100%;background:var(--ink);border-radius:2px;transform-origin:left center;
+  transition:width .25s var(--ease),transform .25s var(--ease)}
 
 /* ============ toolkit ============ */
 .kit{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(28px,4vw,52px)}
@@ -419,35 +444,62 @@ footer a:hover{color:var(--ink)}
 <!-- ================= BUILDING ================= -->
 <section class="sec" id="building" style="padding-top:0">
   <div class="shell">
-    <div class="sec-head rv">
-      <h2>Built outside the day job</h2>
-      <p>Discovery, prototypes, and one registered brand. These exist because the fastest way to stay sharp on AI and 0→1 product work is to keep putting things in front of real users.</p>
+    <div class="rail-head rv">
+      <div class="sec-head">
+        <h2>Built outside the day job</h2>
+        <p>Discovery, prototypes, and a live storefront. These exist because the fastest way to stay sharp on AI and 0→1 product work is to keep putting things in front of real users.</p>
+      </div>
+      <div class="rail-btns">
+        <button class="rb" id="railPrev" type="button" aria-label="Previous projects" aria-controls="track">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6"/></svg>
+        </button>
+        <button class="rb" id="railNext" type="button" aria-label="More projects" aria-controls="track">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+        </button>
+      </div>
     </div>
+  </div>
 
-    <div class="grid">
+  <div class="rail rv">
+    <div class="track" id="track" tabindex="0" role="region" aria-label="Projects built outside work — scroll sideways for more">
 
-      <article class="proj wide rv">
+      <article class="proj">
+        <div class="proj-top">
+          <h3>Swiggy Seamless Support Handoff</h3>
+          <p class="when">Sep 2026</p>
+        </div>
+        <p class="kind">Product case study — research, PRD and live prototype</p>
+        <p>When automated support can't resolve a post-order issue, the transfer to a human succeeds technically and fails experientially: the conversation moves, the case doesn't. The customer starts over.</p>
+        <p>I proposed an editable AI-assisted handoff brief that carries the order, issue, evidence, prior bot action and requested outcome into the agent's first reply — reviewed by the customer before it is sent. The AI summarises and flags missing context; refund eligibility, amount and fraud treatment stay with existing policy systems. Scoped to wrong, missing and damaged-item cases, with first-handoff resolution rate as the primary metric.</p>
+        <div class="stat">
+          <b>8 of 10</b>
+          <span>escalated interviewees repeated information they had already given. Only 3 of 10 accepted the outcome they got.</span>
+        </div>
+        <a class="proj-link" href="https://swiggy-support-handoff-c52.vatsav-varanasi.chatgpt.site" target="_blank" rel="noopener">View the live prototype
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <div class="chips"><span class="chip">User research</span><span class="chip">PRD</span><span class="chip">RICE</span><span class="chip">AI boundaries</span></div>
+      </article>
+
+      <article class="proj">
         <div class="proj-top">
           <h3>WhatsApp Business Promotion Request Gate</h3>
           <p class="when">Aug 2026</p>
         </div>
         <p class="kind">Product discovery and prototype</p>
-        <div class="split">
-          <div>
-            <p>I ran 10 user interviews and collected 41 survey responses to test a hunch about unwanted business messages. The pattern held: unapproved promotions clutter personal conversations and quietly erode people’s sense of control over their own inbox.</p>
-            <p>The design answer was a request gate. Unapproved promotions route to a review inbox where you can allow, reject, or report the business — while OTPs, bills, and transaction messages stay exactly where you need them. I wrote the full PRD covering the user flow, stories, acceptance criteria, edge cases, success metrics, and open questions, then built and published an interactive prototype with a walkthrough video.</p>
-          </div>
-          <div>
-            <p class="metric">37 of 41</p>
-            <p>survey respondents had received promotions they never asked for. The same problem surfaced in 8 of the 10 interviews.</p>
-          </div>
+        <p>I ran 10 user interviews and collected 41 survey responses to test a hunch about unwanted business messages. Unapproved promotions clutter personal conversations and quietly erode people's sense of control over their own inbox.</p>
+        <p>The answer was a request gate: promotions route to a review inbox where you can allow, reject, or report the business, while OTPs, bills, and transaction messages stay where you need them. I wrote the full PRD — flow, stories, acceptance criteria, edge cases, metrics, open questions — and published an interactive prototype with a walkthrough video.</p>
+        <div class="stat">
+          <b>37 of 41</b>
+          <span>survey respondents had received promotions they never asked for. The same problem surfaced in 8 of the 10 interviews.</span>
         </div>
-        <div class="chips">
-          <span class="chip">User research</span><span class="chip">PRD</span><span class="chip">Prototype</span><span class="chip">Privacy</span>
-        </div>
+        <a class="proj-link" href="https://whatsapp-business-request-prototype.vercel.app/" target="_blank" rel="noopener">View the live prototype
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
+        <div class="chips"><span class="chip">User research</span><span class="chip">PRD</span><span class="chip">Prototype</span><span class="chip">Privacy</span></div>
       </article>
 
-      <article class="proj rv">
+      <article class="proj">
         <div class="proj-top">
           <h3>AEP + Microsoft Copilot Automation</h3>
           <p class="when">Sep 2026</p>
@@ -458,7 +510,7 @@ footer a:hover{color:var(--ink)}
         <div class="chips"><span class="chip">AEP</span><span class="chip">Copilot</span><span class="chip">Governance</span><span class="chip">0→1</span></div>
       </article>
 
-      <article class="proj rv">
+      <article class="proj">
         <div class="proj-top">
           <h3>Idea Grill</h3>
           <p class="when">Prototype</p>
@@ -469,7 +521,7 @@ footer a:hover{color:var(--ink)}
         <div class="chips"><span class="chip">Generative AI</span><span class="chip">RAG</span><span class="chip">B2B</span></div>
       </article>
 
-      <article class="proj rv">
+      <article class="proj">
         <div class="proj-top">
           <h3>Menu to Order India</h3>
           <p class="when">Prototype</p>
@@ -480,18 +532,24 @@ footer a:hover{color:var(--ink)}
         <div class="chips"><span class="chip">Gemini</span><span class="chip">0→1</span><span class="chip">Micro-vendors</span></div>
       </article>
 
-      <article class="proj rv">
+      <article class="proj">
         <div class="proj-top">
           <h3>Noir &amp; Lin</h3>
-          <p class="when">2023 – 2026</p>
+          <p class="when">2023 – Present</p>
         </div>
         <p class="kind">Founder and product lead, D2C apparel</p>
-        <p>A registered direct-to-consumer apparel brand taken from zero to launch on minimal upfront investment: product strategy, customer segments, pricing, catalog, Shopify storefront, and the end-to-end customer experience. <b>500+ sales in the first six months</b>, then bulk orders from coffee shops, car garages, schools, and college festivals.</p>
-        <p>Continuous experiments across assortment, pricing, and acquisition channels — read through traffic, conversion, and customer behaviour data — taught me product-market-fit validation the expensive way.</p>
+        <p>A registered direct-to-consumer apparel brand taken from zero to launch on minimal upfront investment: product strategy, customer segments, pricing, catalog, Shopify storefront, and the end-to-end customer experience. Then bulk orders from coffee shops, car garages, schools, and college festivals.</p>
+        <div class="stat">
+          <b>500+</b>
+          <span>sales in the first six months, across direct-to-consumer and local distribution channels.</span>
+        </div>
+        <a class="proj-link" href="https://noirandlin.com/" target="_blank" rel="noopener">Visit the storefront
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
+        </a>
         <div class="chips"><span class="chip">0→1</span><span class="chip">Growth experiments</span><span class="chip">Shopify</span></div>
       </article>
 
-      <article class="proj rv">
+      <article class="proj">
         <div class="proj-top">
           <h3>Abhivatsav Media</h3>
           <p class="when">2017 – 2018</p>
@@ -503,6 +561,10 @@ footer a:hover{color:var(--ink)}
       </article>
 
     </div>
+  </div>
+
+  <div class="shell">
+    <div class="rail-prog rv" aria-hidden="true"><i id="railThumb"></i></div>
   </div>
 </section>
 
@@ -729,6 +791,44 @@ footer a:hover{color:var(--ink)}
       });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
     items.forEach(function (el) { io.observe(el); });
+  }
+
+  /* ---------- projects rail ---------- */
+  var track = document.getElementById('track');
+  if (track) {
+    var prev = document.getElementById('railPrev'),
+        next = document.getElementById('railNext'),
+        thumb = document.getElementById('railThumb'),
+        rTick = false;
+
+    function step() {
+      var card = track.querySelector('.proj');
+      if (!card) return track.clientWidth * 0.8;
+      var gap = parseFloat(getComputedStyle(track).columnGap || 18) || 18;
+      return card.getBoundingClientRect().width + gap;
+    }
+    function sync() {
+      var max = track.scrollWidth - track.clientWidth;
+      var x = track.scrollLeft;
+      if (prev) prev.disabled = x < 6;
+      if (next) next.disabled = x > max - 6;
+      if (thumb) {
+        var ratio = Math.min(track.clientWidth / track.scrollWidth, 1);
+        thumb.style.width = (ratio * 100) + '%';
+        thumb.style.transform = 'translateX(' + (max > 0 ? (x / max) * ((1 / ratio) - 1) * 100 : 0) + '%)';
+      }
+      rTick = false;
+    }
+    function go(dir) {
+      track.scrollBy({ left: dir * step(), behavior: reduce ? 'auto' : 'smooth' });
+    }
+    if (prev) prev.addEventListener('click', function () { go(-1); });
+    if (next) next.addEventListener('click', function () { go(1); });
+    track.addEventListener('scroll', function () {
+      if (!rTick) { rTick = true; requestAnimationFrame(sync); }
+    }, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
   }
 
   /* ---------- card spotlight ---------- */
